@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Elias\\source\\repos\\ORIGIN_Challenge_Elias_Vallejos\\ORIGIN_Challenge_Backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2057937B-7426-45A9-8927-F09676BE67FB}|ORIGIN_Challenge_Backend.csproj|c:\\users\\elias\\source\\repos\\origin_challenge_elias_vallejos\\origin_challenge_backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{2057937B-7426-45A9-8927-F09676BE67FB}|ORIGIN_Challenge_Backend.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 167,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Elias\\source\\repos\\ORIGIN_Challenge_Elias_Vallejos\\ORIGIN_Challenge_Backend\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Elias\\source\\repos\\ORIGIN_Challenge_Elias_Vallejos\\ORIGIN_Challenge_Backend\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-05-18T22:18:33.291Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
