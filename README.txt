@@ -13,3 +13,19 @@
 
 10. Al ingresar a la Interfaz presione el boton "Agregar tarjetas aleatorias a la BD" para tener 
    algunos datos con que realizar las pruebas.
+
+11. Estructura del proyecto:
+/ORIGIN_Challenge_Elias_Vallejos
+├── ORIGIN_Challenge_Backend/
+│   ├── Controllers/
+│   ├── Models/
+│   ├── Services/
+│   ├── appsettings.json
+│   └── Program.cs  
+├── ORIGIN_Challenge_Frontend/
+│   ├── src/
+│   ├── angular.json
+│   ├── package.json
+│   └── tsconfig.json
+└── ORIGIN_Challenge_BD/
+    └── ORIGIN_Challenge_DB.sql
