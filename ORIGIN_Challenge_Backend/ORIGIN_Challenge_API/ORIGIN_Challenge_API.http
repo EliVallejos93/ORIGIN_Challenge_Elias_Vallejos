@@ -1,0 +1,7 @@
+@API_HostAddress = https://localhost:7112
+
+### Probar InsertarDatosAleatorios
+GET {{API_HostAddress}}/Tarjetas/InsertarDatosAleatorios
+Accept: application/json
+
+###

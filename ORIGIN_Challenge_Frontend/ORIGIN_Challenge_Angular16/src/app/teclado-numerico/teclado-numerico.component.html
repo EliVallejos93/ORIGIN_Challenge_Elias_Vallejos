@@ -1,0 +1,27 @@
+<h4 class="card-container" style="margin-bottom: 30px;">{{ titulo }}</h4>
+<br><br>
+<input id="campoVisualizacion" name="campoVisualizacion" class="form-control btn-group" style="height: 40px;"
+    [(ngModel)]="campoVisualizacion" required disabled="disabled">
+<br><br><br>
+<div class="container card-container" style="width: 70%;">
+    <div class="row col-12 mb-2">
+        <button class="btn col-4" (click)="tecleoNumero('7')">7</button>
+        <button class="btn col-4" (click)="tecleoNumero('8')">8</button>
+        <button class="btn col-4" (click)="tecleoNumero('9')">9</button>
+    </div>
+    <div class="row col-12 mb-2">
+        <button class="btn col-4" (click)="tecleoNumero('4')">4</button>
+        <button class="btn col-4" (click)="tecleoNumero('5')">5</button>
+        <button class="btn col-4" (click)="tecleoNumero('6')">6</button>
+    </div>
+    <div class="row col-12 mb-2">
+        <button class="btn col-4" (click)="tecleoNumero('1')">1</button>
+        <button class="btn col-4" (click)="tecleoNumero('2')">2</button>
+        <button class="btn col-4" (click)="tecleoNumero('3')">3</button>
+    </div>
+    <div class="row col-12 mb-2">
+        <button class="btn col-4" (click)="tecleoNumero('0')">0</button>
+        <button class="btn col-4" (click)="verificarFormato()">Aceptar</button>
+        <button class="btn col-4" (click)="limpiarCampos()">Limpiar</button>
+    </div>
+</div>
