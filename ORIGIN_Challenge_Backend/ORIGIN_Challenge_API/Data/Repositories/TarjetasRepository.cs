@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ORIGIN_Challenge_Backend.Models;
+using ORIGIN_Challenge_API.Models;
 
-namespace ORIGIN_Challenge_Backend.Data.Repositories
+namespace ORIGIN_Challenge_API.Data.Repositories
 {
     public class TarjetasRepository : ITarjetasRepository<Tarjeta>
     {
@@ -20,6 +20,13 @@ namespace ORIGIN_Challenge_Backend.Data.Repositories
         public Tarjeta GetByNumero(string numeroTarjeta)
         {
             return _context.Tarjetas.SingleOrDefault(t => t.NumeroTarjeta == numeroTarjeta);
+        }
+
+        public Tarjeta GetByNumeroConOperaciones(string numeroTarjeta)
+        {
+            return _context.Tarjetas
+                .Include(t => t.Operaciones)
+                .SingleOrDefault(t => t.NumeroTarjeta == numeroTarjeta);
         }
 
         public void Add(Tarjeta entity)

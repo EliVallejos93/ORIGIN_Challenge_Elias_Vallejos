@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using ORIGIN_Challenge_Backend.Data;
-using ORIGIN_Challenge_Backend.Data.Repositories;
-using ORIGIN_Challenge_Backend.Data.UnitOfWork;
-using ORIGIN_Challenge_Backend.Models;
-using ORIGIN_Challenge_Backend.Services;
+using ORIGIN_Challenge_API.Data;
+using ORIGIN_Challenge_API.Data.Repositories;
+using ORIGIN_Challenge_API.Data.UnitOfWork;
+using ORIGIN_Challenge_API.Models;
+using ORIGIN_Challenge_API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,9 +31,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IPinService, PinService>();
 builder.Services.AddScoped<ITarjetasRepository<Tarjeta>, TarjetasRepository>();
 builder.Services.AddScoped<ITarjetasService, TarjetasService>();
-
-// Registrar IHttpContextAccessor
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IOperacionesService, OperacionesService>();
 
 // Configurar la sesión
 builder.Services.AddDistributedMemoryCache();

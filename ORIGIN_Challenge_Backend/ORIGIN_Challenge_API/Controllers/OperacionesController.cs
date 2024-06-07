@@ -1,108 +1,79 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ORIGIN_Challenge_Backend.Data;
-using ORIGIN_Challenge_Backend.Models;
+using ORIGIN_Challenge_API.DTOs;
+using ORIGIN_Challenge_API.Models;
+using ORIGIN_Challenge_API.Services;
 
-namespace ORIGIN_Challenge_Backend.Controllers
+namespace ORIGIN_Challenge_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class OperacionesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IOperacionesService _operacionesService;
 
-        public OperacionesController(ApplicationDbContext context)
+        public OperacionesController(IOperacionesService operacionesService)
         {
-            _context = context;
+            _operacionesService = operacionesService;
         }
 
         [HttpGet("Balance")]
-        public IActionResult Balance(string numeroTarjeta)
+        public async Task<IActionResult> Balance(string numeroTarjeta)
         {
-            var tarjeta = _context.Tarjetas
-                .Include(t => t.Operaciones)
-                .SingleOrDefault(t => t.NumeroTarjeta == numeroTarjeta);
-
-            if (tarjeta == null)
+            try
             {
-                return NotFound("Tarjeta no encontrada.");
-            }
+                TarjetaOperacionDto tarjetaOperacionDto = _operacionesService.Balance(numeroTarjeta);
 
-            var operacion = new Operacion
-            {
-                IdTarjeta = tarjeta.IdTarjeta,
-                Fecha = DateTime.Now,
-                CodigoOperacion = new Random().Next(100000000, 999999999),
-                CantidadRetiro = 0,
-                Balance = tarjeta.DineroEnCuenta
-            };
-
-            _context.Operaciones.Add(operacion);
-            _context.SaveChanges();
-
-            var operaciones = tarjeta.Operaciones.Select(o => new
-            {
-                o.Fecha,
-                o.CodigoOperacion,
-                o.CantidadRetiro,
-                o.Balance
-            });
-
-            return Ok(new
-            {
-                code = 200,
-                message = "Operacion exitosa",
-                data = new
+                return Ok(new
                 {
-                    dineroEnCuenta = tarjeta.DineroEnCuenta,
-                    fechaVencimiento = tarjeta.FechaVencimiento,
-                    operaciones = operaciones
-                }
-            });
+                    code = 200,
+                    message = "Operacion exitosa",
+                    data = new
+                    {
+                        dineroEnCuenta = tarjetaOperacionDto.T_DineroEnCuenta,
+                        fechaVencimiento = tarjetaOperacionDto.T_FechaVencimiento,
+                        operaciones = tarjetaOperacionDto.Operaciones
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return ex.HResult switch
+                {
+                    400 => BadRequest(ex.Message),
+                    401 => Unauthorized(ex.Message),
+                    404 => NotFound(ex.Message),
+                    423 => StatusCode(423, ex.Message),
+                    _ => StatusCode(500, "Error interno del servidor"),
+                };
+            }
         }
 
         [HttpGet("Retiro")]
-        public IActionResult Retiro(string numeroTarjeta, string cantidadRetiro)
+        public async Task<IActionResult> Retiro(string numeroTarjeta, string cantidadRetiro)
         {
-            if (!decimal.TryParse(cantidadRetiro, out decimal cantidadRetiroDecimal))
+            try
             {
-                return BadRequest("El valor de cantidadRetiro no es válido.");
+                _operacionesService.Retiro(numeroTarjeta, cantidadRetiro);
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Retiro exitoso",
+                    data = new { }
+                });
             }
-
-            var tarjeta = _context.Tarjetas
-                .Include(t => t.Operaciones)
-                .SingleOrDefault(t => t.NumeroTarjeta == numeroTarjeta);
-
-            if (tarjeta == null)
+            catch (Exception ex)
             {
-                return NotFound("Tarjeta no encontrada.");
+                return ex.HResult switch
+                {
+                    400 => BadRequest(ex.Message),
+                    401 => Unauthorized(ex.Message),
+                    404 => NotFound(ex.Message),
+                    423 => StatusCode(423, ex.Message),
+                    _ => StatusCode(500, "Error interno del servidor"),
+                };
             }
-
-            if (cantidadRetiroDecimal > tarjeta.DineroEnCuenta)
-            {
-                return BadRequest("Fondos insuficientes para completar la transacción.");
-            }
-
-            tarjeta.DineroEnCuenta -= cantidadRetiroDecimal;
-
-            var operacion = new Operacion
-            {
-                IdTarjeta = tarjeta.IdTarjeta,
-                Fecha = DateTime.Now,
-                CodigoOperacion = new Random().Next(100000000, 999999999),
-                CantidadRetiro = cantidadRetiroDecimal,
-                Balance = tarjeta.DineroEnCuenta
-            };
-
-            _context.Operaciones.Add(operacion);
-            _context.SaveChanges();
-
-            return Ok(new
-            {
-                code = 200,
-                message = "Retiro exitoso",
-                data = new { }
-            });
         }
     }
 }

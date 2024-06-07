@@ -1,19 +1,17 @@
-﻿using ORIGIN_Challenge_Backend.Data.UnitOfWork;
-using ORIGIN_Challenge_Backend.Models;
+﻿using ORIGIN_Challenge_API.Data.UnitOfWork;
+using ORIGIN_Challenge_API.Models;
 using System.Text.Json;
 
-namespace ORIGIN_Challenge_Backend.Services
+namespace ORIGIN_Challenge_API.Services
 {
     public class TarjetasService : ITarjetasService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPinService _pinService;
 
-        public TarjetasService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IPinService pinService)
+        public TarjetasService(IUnitOfWork unitOfWork, IPinService pinService)
         {
             _unitOfWork = unitOfWork;
-            _httpContextAccessor = httpContextAccessor;
             _pinService = pinService;
         }
 
@@ -25,14 +23,11 @@ namespace ORIGIN_Challenge_Backend.Services
         public Tarjeta VerificarTarjeta(string numeroTarjeta)
         {
             var tarjeta = _unitOfWork.Tarjetas.GetByNumero(numeroTarjeta);
+
             if (tarjeta == null)
-            {
-                throw new KeyNotFoundException("Tarjeta no encontrada");
-            }
+                throw MiExcepcion.TarjetaNoEncontradaException("Tarjeta no encontrada");
             if (tarjeta.Bloqueada)
-            {
-                throw new InvalidOperationException("La tarjeta está bloqueada");
-            }
+                throw MiExcepcion.TarjetaBloqueadaException("La tarjeta está bloqueada");
 
             return tarjeta;
         }
@@ -41,7 +36,6 @@ namespace ORIGIN_Challenge_Backend.Services
         {
             _unitOfWork.Tarjetas.Update(tarjeta);
             _unitOfWork.Save();
-            _httpContextAccessor.HttpContext.Items["Tarjeta"] = tarjeta;
         }
 
         public void ResetearConteoPin()
@@ -58,9 +52,9 @@ namespace ORIGIN_Challenge_Backend.Services
                 {
                     tarjeta.Bloqueada = true;
                     _unitOfWork.Tarjetas.Update(tarjeta);
-                    throw Excepcion.TarjetaBloqueadaException("La Tarjeta ha sido bloqueada");
+                    throw MiExcepcion.TarjetaBloqueadaException("La Tarjeta ha sido bloqueada");
                 }
-                throw Excepcion.UnauthorizedException("El PIN es incorrecto");
+                throw MiExcepcion.UnauthorizedException("El PIN es incorrecto");
             }
         }
     }

@@ -53,11 +53,8 @@ export class AppComponent {
   }
 
   verificarNumero(tipo: string, numero: string) {
-    // tarjeta
     if (tipo == 'esTarjeta') this.verificarTarjeta(numero);
-    // pin
     if (tipo == 'esPin') this.verificarPin(numero);
-    // retiro
     if (tipo == 'esRetiro') this.retirarDinero(numero);
   }
 

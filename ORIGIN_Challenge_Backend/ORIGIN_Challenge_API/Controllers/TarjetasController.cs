@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ORIGIN_Challenge_Backend.Data;
-using ORIGIN_Challenge_Backend.Services;
+using ORIGIN_Challenge_API.Data;
+using ORIGIN_Challenge_API.Services;
+using System;
 
-namespace ORIGIN_Challenge_Backend.Controllers
+namespace ORIGIN_Challenge_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -31,7 +32,7 @@ namespace ORIGIN_Challenge_Backend.Controllers
         }
 
         [HttpGet("VerificarTarjeta")]
-        public IActionResult VerificarTarjeta(string numeroTarjeta)
+        public async Task<IActionResult> VerificarTarjeta(string numeroTarjeta)
         {
             try
             {
@@ -47,10 +48,21 @@ namespace ORIGIN_Challenge_Backend.Controllers
             {
                 return StatusCode(423, ex.Message);
             }
+            catch (Exception ex)
+            {
+                return ex.HResult switch
+                {
+                    400 => BadRequest(ex.Message),
+                    401 => Unauthorized(ex.Message),
+                    404 => NotFound(ex.Message),
+                    423 => StatusCode(423, ex.Message),
+                    _ => StatusCode(500, "Error interno del servidor"),
+                };
+            }
         }
 
         [HttpGet("VerificarPin")]
-        public IActionResult VerificarPin(string numeroTarjeta, string numeroPin)
+        public async Task<IActionResult> VerificarPin(string numeroTarjeta, string numeroPin)
         {
             try
             {
@@ -63,10 +75,11 @@ namespace ORIGIN_Challenge_Backend.Controllers
                     data = new { }
                 });
             }
-            catch (Excepcion ex)
+            catch (Exception ex)
             {
                 return ex.HResult switch
                 {
+                    400 => BadRequest(ex.Message),
                     401 => Unauthorized(ex.Message),
                     404 => NotFound(ex.Message),
                     423 => StatusCode(423, ex.Message),

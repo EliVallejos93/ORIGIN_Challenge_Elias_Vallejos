@@ -1,12 +1,13 @@
-﻿using ORIGIN_Challenge_Backend.Data.Repositories;
-using ORIGIN_Challenge_Backend.Models;
+﻿using ORIGIN_Challenge_API.Data.Repositories;
+using ORIGIN_Challenge_API.Models;
 
-namespace ORIGIN_Challenge_Backend.Data.UnitOfWork
+namespace ORIGIN_Challenge_API.Data.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
         private ITarjetasRepository<Tarjeta> _tarjetasRepository;
+        private IOperacionesRepository<Operaciones> _operacionesRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -15,10 +16,12 @@ namespace ORIGIN_Challenge_Backend.Data.UnitOfWork
 
         public ITarjetasRepository<Tarjeta> Tarjetas
         {
-            get
-            {
-                return _tarjetasRepository ?? (_tarjetasRepository = new TarjetasRepository(_context));
-            }
+            get { return _tarjetasRepository ?? (_tarjetasRepository = new TarjetasRepository(_context)); }
+        }
+
+        public IOperacionesRepository<Operaciones> Operaciones
+        {
+            get { return _operacionesRepository ?? (_operacionesRepository = new OperacionesRepository(_context)); }
         }
 
         public void Save()

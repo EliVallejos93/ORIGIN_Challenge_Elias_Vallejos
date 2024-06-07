@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ORIGIN_Challenge_Backend.Models;
+using ORIGIN_Challenge_API.Models;
 
-namespace ORIGIN_Challenge_Backend.Services
+namespace ORIGIN_Challenge_API.Services
 {
     public interface ITarjetasService
     {

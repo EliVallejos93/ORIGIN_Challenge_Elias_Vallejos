@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ORIGIN_Challenge_Backend.Models;
+using ORIGIN_Challenge_API.Models;
 
-namespace ORIGIN_Challenge_Backend.Data
+namespace ORIGIN_Challenge_API.Data
 {
     public partial class ApplicationDbContext : DbContext
     {
@@ -11,7 +11,7 @@ namespace ORIGIN_Challenge_Backend.Data
         }
 
         public virtual DbSet<Tarjeta> Tarjetas { get; set; }
-        public virtual DbSet<Operacion> Operaciones { get; set; }
+        public virtual DbSet<Operaciones> Operaciones { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -41,7 +41,7 @@ namespace ORIGIN_Challenge_Backend.Data
 
             });
 
-            modelBuilder.Entity<Operacion>(entity =>
+            modelBuilder.Entity<Operaciones>(entity =>
             {
                 entity.ToTable("Operaciones");
 

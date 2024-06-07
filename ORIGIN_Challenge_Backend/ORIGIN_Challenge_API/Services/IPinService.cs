@@ -1,4 +1,4 @@
-﻿namespace ORIGIN_Challenge_Backend.Services
+﻿namespace ORIGIN_Challenge_API.Services
 {
     public interface IPinService
     {

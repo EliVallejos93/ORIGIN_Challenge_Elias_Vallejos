@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace ORIGIN_Challenge_Backend.Models
+namespace ORIGIN_Challenge_API.Models
 {
     public class Tarjeta
     {
@@ -20,13 +20,12 @@ namespace ORIGIN_Challenge_Backend.Models
 
         [Required]
         [Column(TypeName = "decimal(10, 2)")]
-
         public decimal DineroEnCuenta { get; set; }
 
         [Required]
         public DateTime FechaVencimiento { get; set; }
 
-        public ICollection<Operacion> Operaciones { get; set; }
+        public ICollection<Operaciones> Operaciones { get; set; }
 
     }
 }

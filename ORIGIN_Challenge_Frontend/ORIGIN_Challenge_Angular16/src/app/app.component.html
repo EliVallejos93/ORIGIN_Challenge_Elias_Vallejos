@@ -26,7 +26,7 @@
   <div *ngIf="!spinner && paso == 1">
     <h4 class="card-container" style="margin-bottom: 30px;">Aplicación</h4>
     <br>
-    <button class="btn" (click)="agregarTarjetaAleatoria()">Agregar tarjetas aleatorias a la BD</button>
+    <button class="btn btn-primary" (click)="agregarTarjetaAleatoria()">Agregar tarjetas aleatorias a la BD</button>
     <div class="card-container">
       <a class="card" (click)="paso = 2;">
         <span class="material-symbols-outlined">group</span>
@@ -86,7 +86,7 @@
           <div *ngIf="spinner" class="spinner-border text-primary" role="status"
             style="width: 180px; height: 180px; position:absolute; margin-top: -10px;">
           </div>
-          <img src="assets/tarjeta.png" alt="Imagen del clima" width="200" style="margin-top: -20px;">
+          <img src="assets/tarjeta.png" alt="Imagen de tarjeta" width="200" style="margin-top: -20px;">
         </div>
         <div class="col-6" style="margin-top: 20px;">
           <form class="d-flex flex-column col-12" [style.width]="'100%'">
@@ -104,7 +104,7 @@
       </div>
     </div>
     <div *ngIf="operaciones.length" class="row container" style="width: 120%; margin-left: -6%; margin-top: 6%;">
-      <div class="card card-body" style="width: 90%; height: 100%;">
+      <div class="d-flex justify-content-center highlight-card table table-primary" style="width: 90%; height: 100%;">
         <table>
           <thead>
             <tr>

@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\ORIGIN_Challenge_Backend.props" />
-</Project>

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using ORIGIN_Challenge_Backend.Controllers;
-using ORIGIN_Challenge_Backend.Services;
+using ORIGIN_Challenge_API.Controllers;
+using ORIGIN_Challenge_API.Services;
 
 namespace TestProject_XUnit
 {
@@ -31,7 +31,7 @@ namespace TestProject_XUnit
         }
 
         [Fact]
-        public void VerificarTarjeta_ReturnsOk()
+        public async Task VerificarTarjeta_ReturnsOk()
         {
             // Arrange
             string numeroTarjeta = "1234567890";
@@ -39,7 +39,7 @@ namespace TestProject_XUnit
             _mockTarjetasService.Setup(service => service.ResetearConteoPin());
 
             // Act
-            var result = _controller.VerificarTarjeta(numeroTarjeta);
+            var result = await _controller.VerificarTarjeta(numeroTarjeta);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -47,7 +47,7 @@ namespace TestProject_XUnit
         }
 
         [Fact]
-        public void VerificarTarjeta_ReturnsNotFound()
+        public async Task VerificarTarjeta_ReturnsNotFound()
         {
             // Arrange
             string numeroTarjeta = "1234567890";
@@ -55,7 +55,7 @@ namespace TestProject_XUnit
                 .Throws(new KeyNotFoundException());
 
             // Act
-            var result = _controller.VerificarTarjeta(numeroTarjeta);
+            var result = await _controller.VerificarTarjeta(numeroTarjeta);
 
             // Assert
             var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
@@ -63,7 +63,7 @@ namespace TestProject_XUnit
         }
 
         [Fact]
-        public void VerificarTarjeta_ReturnsLocked()
+        public async Task VerificarTarjeta_ReturnsLocked()
         {
             // Arrange
             string numeroTarjeta = "1234567890";
@@ -71,17 +71,17 @@ namespace TestProject_XUnit
                 .Throws(new InvalidOperationException("Account locked"));
 
             // Act
-            var result = _controller.VerificarTarjeta(numeroTarjeta);
+            var result = await _controller.VerificarTarjeta(numeroTarjeta);
 
             // Assert
-            var lockedResult = result as ObjectResult;
+            var lockedResult = (IActionResult)result as ObjectResult;
             Assert.NotNull(lockedResult);
             Assert.Equal(423, lockedResult.StatusCode);
             Assert.Equal("Account locked", lockedResult.Value);
         }
 
         [Fact]
-        public void VerificarPin_ReturnsOk()
+        public async Task VerificarPin_ReturnsOk()
         {
             // Arrange
             string numeroTarjeta = "1234567890";
@@ -89,7 +89,7 @@ namespace TestProject_XUnit
             _mockTarjetasService.Setup(service => service.VerificarPin(numeroTarjeta, numeroPin));
 
             // Act
-            var result = _controller.VerificarPin(numeroTarjeta, numeroPin);
+            var result = await _controller.VerificarPin(numeroTarjeta, numeroPin);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -97,16 +97,16 @@ namespace TestProject_XUnit
         }
 
         [Fact]
-        public void VerificarPin_ReturnsUnauthorized()
+        public async Task VerificarPin_ReturnsUnauthorized()
         {
             // Arrange
             string numeroTarjeta = "1234567890";
             string numeroPin = "1234";
             _mockTarjetasService.Setup(service => service.VerificarPin(numeroTarjeta, numeroPin))
-                .Throws(Excepcion.UnauthorizedException("Unauthorized"));
+                .Throws(MiExcepcion.UnauthorizedException("Unauthorized"));
 
             // Act
-            var result = _controller.VerificarPin(numeroTarjeta, numeroPin);
+            var result = await _controller.VerificarPin(numeroTarjeta, numeroPin);
 
             // Assert
             var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);

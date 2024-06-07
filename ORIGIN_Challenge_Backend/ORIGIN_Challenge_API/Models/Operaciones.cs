@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace ORIGIN_Challenge_Backend.Models
+namespace ORIGIN_Challenge_API.Models
 {
-    public class Operacion
+    public class Operaciones
     {
         [Key]
         public int IdOperacion { get; set; }
