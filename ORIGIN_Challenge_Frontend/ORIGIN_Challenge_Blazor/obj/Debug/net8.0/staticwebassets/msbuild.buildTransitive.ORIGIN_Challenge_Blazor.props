@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\ORIGIN_Challenge_Blazor.props" />
+</Project>

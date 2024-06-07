@@ -1,0 +1,171 @@
+﻿@* Home.razor *@
+@page "/"
+@using System.Threading.Tasks
+@using Newtonsoft.Json;
+@using ORIGIN_Challenge_Blazor.Models
+@using ORIGIN_Challenge_Blazor.Services
+@using ORIGIN_Challenge_Blazor.DTOs
+@using ORIGIN_Challenge_Blazor.Shared
+@using System.Globalization
+
+@inject TarjetasService TarjetasService
+@inject OperacionesService OperacionesService
+@inject AlertService AlertService
+
+
+<Alerta Modal="modal" />
+
+@if (spinner)
+{
+    <div class="spinner">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+    </div>
+}
+else
+{
+    <br />
+    <br />
+
+    <!-- paso 1: entrar en la aplicacion -->
+    if (paso == 1)
+    {
+        <h4 class="card-container" style="margin-bottom: 30px;">Aplicación</h4>
+        <button class="btn btn-primary" @onclick="InsertarDatosAleatorios">Agregar tarjetas aleatorias a la BD</button>
+        <br />
+        <div class="card-container">
+            <a class="card" @onclick="() => paso = 2">
+                <span class="material-symbols-outlined">group</span>
+                &nbsp;&nbsp;
+                <span>ATM (cajero automático)</span>
+                <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
+            </a>
+        </div>
+    }
+
+    <!-- paso 2: ingresar numero de tarjeta -->
+    else if (paso == 2)
+    {
+        <div style="width: 50%;">
+            <TecladoNumerico Titulo="Número de Tarjeta" Tipo="esTarjeta" Formato="XXXX-XXXX-XXXX-XXXX"
+                             Mensaje="TecladoNumerico_ShowAlert" PresionoAceptar="TecladoNumerico_VerificarNumero" />
+        </div>
+    }
+
+    <!-- paso 3: ingresar numero de pin -->
+    else if (paso == 3)
+    {
+        <div style="width: 50%;">
+            <TecladoNumerico Titulo="Número de PIN" Tipo="esPin" Formato="XXXX" Mensaje="TecladoNumerico_ShowAlert"
+                             PresionoAceptar="TecladoNumerico_VerificarNumero" />
+        </div>
+    }
+
+    <!-- paso 4: elegir la operacion -->
+    else if (paso == 4)
+    {
+        <h4 class="card-container" style="margin-bottom: 30px;">Operaciones</h4>
+        <br>
+        <div class="card-container">
+            <a class="card" @onclick="AbrirBalance">
+                <span class="material-symbols-outlined">monetization_on</span>
+                &nbsp;&nbsp;
+                <span>Balance</span>
+                <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
+            </a>
+        </div>
+        <div class="card-container">
+            <a class="card" @onclick="()=> paso = 6">
+                <span class="material-symbols-outlined">universal_currency_alt</span>
+                &nbsp;&nbsp;
+                <span>Retiro</span>
+                <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
+            </a>
+        </div>
+    }
+
+    <!-- paso 5: ver el balance -->
+    else if (paso == 5)
+    {
+        <div class="container p-4 d-flex justify-content-center">
+            <div class="row" style="width: 600px;">
+                <div class="col-6 d-flex justify-content-center" style="margin-top: 5%;">
+                    <img src="images/tarjeta.png" alt="Imagen de tarjeta" width="200" style="margin-top: -20px;">
+                </div>
+                <div class="col-6" style="margin-top: 20px;">
+                    <form class="d-flex flex-column col-12" style="width: 100%">
+                        <label for="numeroTarjeta">Numero Tarjeta:</label>
+                        <input id="numeroTarjeta" name="numeroTarjeta" class="form-control btn-group" style="height: 40px;"
+                               @bind="tarjetaSinGuiones" disabled="disabled">
+                        <label for="fechaVencimiento">Fecha Vencimiento:</label>
+                        <input id="fechaVencimiento" name="fechaVencimiento" class="form-control btn-group" style="height: 40px;"
+                               @bind="fechaVencimiento" disabled="disabled">
+                        <label for="balance">Dinero en Cuenta:</label>
+                        <input id="balance" name="balance" class="form-control btn-group" style="height: 40px;"
+                               @bind="dineroEnCuenta" disabled="disabled">
+                    </form>
+                </div>
+            </div>
+        </div>
+        @if (operaciones != null && operaciones.Count > 0)
+        {
+            <div class="row container" style="width: 120%; margin-left: -6%; margin-top: 6%;">
+                <div class="d-flex justify-content-center highlight-card table table-primary" style="width: 90%; height: 100%;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha Operacion</th>
+                                <th>Codigo Operacion</th>
+                                <th>Retiros</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var operacion in operaciones)
+                            {
+                                <tr>
+                                    <td style="min-width: 250px;">@operacion.Fecha.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)</td>
+                                    <td style="min-width: 170px;">@operacion.CodigoOperacion</td>
+                                    <td style="min-width: 100px;">@operacion.CantidadRetiro</td>
+                                    <td style="min-width: 100px;">@operacion.Balance</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>No hay operaciones para mostrar.</p>
+        }
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary" style="margin-top: 50px; margin-bottom: -40px;" @onclick="()=> paso = 4">Atras</button>
+        </div>
+    }
+
+    <!-- paso 6: realizar un retiro -->
+    else if (paso == 6)
+    {
+        <div style="width: 50%;">
+            <TecladoNumerico Titulo="Cantidad a Retirar" Tipo="esRetiro" Formato="0" Mensaje="TecladoNumerico_ShowAlert"
+                             PresionoAceptar="TecladoNumerico_VerificarNumero" />
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-primary" style="margin-top: 50px; margin-bottom: -40px;" @onclick="()=> paso = 4">Atras</button>
+            </div>
+        </div>
+    }
+
+    if (paso > 1)
+    {
+        <button class="btn btn-primary" style="margin-top: 50px;" @onclick="SalirAplicacion">Salir</button>
+    }
+}

@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Elias\\source\\repos\\ORIGIN_Challenge_Elias_Vallejos\\ORIGIN_Challenge_Frontend\\ORIGIN_Challenge_Blazor\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A9F530B6-37AD-467A-B8B3-127202570220}|ORIGIN_Challenge_Blazor.csproj|c:\\users\\elias\\source\\repos\\origin_challenge_elias_vallejos\\origin_challenge_frontend\\origin_challenge_blazor\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A9F530B6-37AD-467A-B8B3-127202570220}|ORIGIN_Challenge_Blazor.csproj|solutionrelative:pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Home.razor",
+              "DocumentMoniker": "C:\\Users\\Elias\\source\\repos\\ORIGIN_Challenge_Elias_Vallejos\\ORIGIN_Challenge_Frontend\\ORIGIN_Challenge_Blazor\\Pages\\Home.razor",
+              "RelativeDocumentMoniker": "Pages\\Home.razor",
+              "ToolTip": "C:\\Users\\Elias\\source\\repos\\ORIGIN_Challenge_Elias_Vallejos\\ORIGIN_Challenge_Frontend\\ORIGIN_Challenge_Blazor\\Pages\\Home.razor",
+              "RelativeToolTip": "Pages\\Home.razor",
+              "ViewState": "AQIAAGQAAAAAAAAAAAAawHoAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-01T02:18:38.042Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

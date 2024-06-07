@@ -1,0 +1,23 @@
+﻿@inherits LayoutComponentBase
+<div class="page">
+    @* <div class="sidebar">
+        <NavMenu />
+    </div> *@
+
+    <main>
+        <div class="toolbar sidebar2" role="banner">
+            <img width="40" alt="Blazor Logo"
+                 src="images/blazor-logo.png" />
+            <span>Bienvenido al CHALLENGE ORIGIN de Elias Vallejos</span>
+            <div class="spacer"></div>
+            <a aria-label="LinkedIn" target="_blank" href="https://linkedin.com/in/elias-vallejos-24001089/" title="LinkedIn"
+               class="linkedin-icon">
+                <img id="linkedin-logo" src="images/linkedin-logo1.png" alt="LinkedIn Logo" />
+            </a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

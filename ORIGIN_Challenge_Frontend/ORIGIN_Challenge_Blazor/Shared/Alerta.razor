@@ -1,0 +1,54 @@
+﻿@using ORIGIN_Challenge_Blazor.DTOs
+@using ORIGIN_Challenge_Blazor.Services
+
+<div class="@AlertClasses" style="margin-top: -70px; position: fixed; width: 50%; z-index: 1000;">
+    <h4 class="alert-heading">@Modal.Titulo</h4>
+    <p>@Modal.Contenido</p>
+</div>
+
+@code {
+    [Parameter]
+    public Modal Modal { get; set; }
+
+    private string AlertClasses
+    {
+        get
+        {
+            var classes = "alert";
+            if (Modal.Visible)
+            {
+                classes += " show-alert";
+            }
+            else
+            {
+                classes += " hide-alert";
+            }
+
+            switch (Modal.Tipo)
+            {
+                case "OK":
+                    classes += " alert-success";
+                    break;
+                case "WARN":
+                    classes += " alert-warning";
+                    break;
+                case "ERR":
+                    classes += " alert-danger";
+                    break;
+                default:
+                    break;
+            }
+
+            return classes;
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Modal.Visible)
+        {
+            await Task.Delay(2000);
+            Modal.Visible = false;
+        }
+    }
+}

@@ -1,0 +1,131 @@
+﻿<h4 class="card-container" style="margin-bottom: 30px;">@Titulo</h4>
+<br>
+<br>
+<input id="campoVisualizacion" name="campoVisualizacion" class="form-control btn-group" style="height: 40px;"
+       @bind="CampoVisualizacion" disabled="disabled">
+<br>
+<br>
+<br>
+<div class="container card-container" style="width: 70%;">
+    <div class="row col-12 mb-2">
+        <button class="btn col-4" @onclick="() => TecleoNumero('7')">7</button>
+        <button class="btn col-4" @onclick="() => TecleoNumero('8')">8</button>
+        <button class="btn col-4" @onclick="() => TecleoNumero('9')">9</button>
+    </div>
+    <div class="row col-12 mb-2">
+        <button class="btn col-4" @onclick="() => TecleoNumero('4')">4</button>
+        <button class="btn col-4" @onclick="() => TecleoNumero('5')">5</button>
+        <button class="btn col-4" @onclick="() => TecleoNumero('6')">6</button>
+    </div>
+    <div class="row col-12 mb-2">
+        <button class="btn col-4" @onclick="() => TecleoNumero('1')">1</button>
+        <button class="btn col-4" @onclick="() => TecleoNumero('2')">2</button>
+        <button class="btn col-4" @onclick="() => TecleoNumero('3')">3</button>
+    </div>
+    <div class="row col-12 mb-2">
+        <button class="btn col-4" @onclick="() => TecleoNumero('0')">0</button>
+        <button class="btn col-4" @onclick="VerificarFormato">Aceptar</button>
+        <button class="btn col-4" @onclick="LimpiarCampos">Limpiar</button>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public string Titulo { get; set; } = "";
+    [Parameter] public string Tipo { get; set; } = "";
+    [Parameter] public string Formato { get; set; } = "";
+    [Parameter] public EventCallback<string> Mensaje { get; set; }
+    [Parameter] public EventCallback<(string tipo, string numero)> PresionoAceptar { get; set; }
+
+    private string CampoVisualizacion { get; set; }
+
+    protected override void OnInitialized()
+    {
+        CampoVisualizacion = Formato;
+    }
+
+    //----------------------------------INGRESO DE DATOS----------------------------------
+    private void TecleoNumero(char numeroChar)
+    {
+        string numero = numeroChar.ToString();
+        if (Tipo == "esTarjeta") FiltrarTarjeta(numero);
+        if (Tipo == "esPin") FiltrarPin(numero);
+        if (Tipo == "esRetiro") FiltrarRetiro(numero);
+    }
+
+    private void FiltrarTarjeta(string numero)
+    {
+        if (CampoVisualizacion == Formato)
+            CampoVisualizacion = "";
+
+        if (CampoVisualizacion.Length < 19)
+        {
+            if (CampoVisualizacion.Length == 4 || CampoVisualizacion.Length == 9 || CampoVisualizacion.Length == 14)
+                CampoVisualizacion += "-";
+
+            CampoVisualizacion += numero;
+        }
+    }
+
+    private void FiltrarPin(string numero)
+    {
+        if (CampoVisualizacion == Formato)
+            CampoVisualizacion = "";
+
+        if (CampoVisualizacion.Length < 4)
+            CampoVisualizacion += numero;
+    }
+
+    private void FiltrarRetiro(string numero)
+    {
+        if (CampoVisualizacion == Formato)
+            CampoVisualizacion = "";
+
+        CampoVisualizacion += numero;
+    }
+
+    //----------------------------------VERIFICAR FORMATO AL ACEPTAR----------------------------------
+    private async Task VerificarFormato()
+    {
+        if (Tipo == "esTarjeta") await VerificarTarjeta();
+        if (Tipo == "esPin") await VerificarPin();
+        if (Tipo == "esRetiro") await VerificarRetiro();
+    }
+
+    private async Task VerificarTarjeta()
+    {
+        if (CampoVisualizacion.Length == 19 && CampoVisualizacion != Formato)
+        {
+            var tarjetaSinGuiones = CampoVisualizacion.Replace("-", "").Trim();
+            await Emitir(Tipo, tarjetaSinGuiones);
+        }
+        else await Mensaje.InvokeAsync("Por favor, ingrese una tarjeta válida.");
+    }
+
+    private async Task VerificarPin()
+    {
+        if (CampoVisualizacion.Length == 4 && CampoVisualizacion != Formato)
+            await Emitir(Tipo, CampoVisualizacion);
+
+        else await Mensaje.InvokeAsync("Por favor, ingrese un pin válido.");
+    }
+
+    private async Task VerificarRetiro()
+    {
+        if (CampoVisualizacion != Formato)
+            await Emitir(Tipo, CampoVisualizacion);
+
+        else await Mensaje.InvokeAsync("Por favor, ingrese una cantidad válida.");
+    }
+
+    private async Task Emitir(string tipo, string numero)
+    {
+        await PresionoAceptar.InvokeAsync((tipo, numero));
+    }
+
+    //----------------------------------LIMPIAR CAMPO----------------------------------
+    private void LimpiarCampos()
+    {
+        CampoVisualizacion = Formato;
+    }
+}
